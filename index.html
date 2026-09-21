@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Integrado de Flota Ruc Airlines - Manifiesto DOW y Ajustes</title>
+    <style>
+        :root {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --border-color: #334155;
+            --header-bg: #0f172a;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --primary: #2563eb;
+            --accent-red: #b91c1c;
+            --accent-green: #15803d;
+            --accent-yellow: #ca8a04;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-light);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: #60a5fa;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .selector-panel {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0f172a;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .selector-panel label {
+            font-weight: bold;
+            color: var(--text-muted);
+        }
+
+        .selector-panel select {
+            padding: 8px 12px;
+            background: #1e293b;
+            color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .header-table, .main-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .header-table td, .main-table th, .main-table td {
+            border: 1px solid var(--border-color);
+            padding: 6px 10px;
+        }
+
+        .header-table td {
+            background-color: #111827;
+        }
+
+        .section-title {
+            background-color: #020617;
+            color: #38bdf8;
+            text-align: left;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 8px;
+            font-size: 0.85rem;
+        }
+
+        .main-table th {
+            background-color: #334155;
+            color: var(--text-light);
+            text-align: center;
+        }
+
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+
+        input.editable {
+            background: #0f172a;
+            color: #fff;
+            border: 1px solid var(--border-color);
+            padding: 4px;
+            width: 90px;
+            text-align: right;
+            border-radius: 4px;
+        }
+
+        .adjustments-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .adjustment-card {
+            border: 1px solid var(--border-color);
+            background: #0f172a;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+
+        .adj-header {
+            background-color: var(--accent-red);
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            padding: 8px;
+            font-size: 0.9rem;
+        }
+
+        .adj-body {
+            padding: 10px;
+            font-size: 0.85rem;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .adj-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1e293b;
+            padding: 6px 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+        }
+
+        .badge-green { background-color: var(--accent-green); color: white; font-weight: bold; padding: 3px 8px; border-radius: 3px; }
+        .badge-yellow { background-color: var(--accent-yellow); color: black; font-weight: bold; padding: 3px 8px; border-radius: 3px; width: 100%; text-align: center; display: block;}
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>SISTEMA INTEGRADO DE PESO & BALANCE - FLOTA RUC AIRLINES</h1>
+
+    <div class="selector-panel">
+        <div>
+            <label for="fleet-select">Seleccionar Matrícula / Aeronave:</label>
+            <select id="fleet-select" onchange="cargarAeronave()">
+                <option value="YV648T">YV648T (MD80 - Libras)</option>
+                <option value="YV647T">YV647T (MD83 - Libras)</option>
+                <option value="YV655T">YV655T (Boeing 737-300 - Kilos)</option>
+                <option value="YV645T">YV645T (Boeing 737-300 - Libras)</option>
+                <option value="YV663T">YV663T (MD80 - Kilos)</option>
+                <option value="YV664T">YV664T (MD80 - Kilos)</option>
+                <option value="YV3063">YV3063 (Boeing 737-300 - Kilos)</option>
+                <option value="YV676T">YV676T (Boeing 737-200 - Libras)</option>
+            </select>
+        </div>
+        <div id="units-display" style="font-weight: bold; color: #38bdf8;">Unidades: Libras (Lb)</div>
+    </div>
+
+    <!-- Cabecera de la aeronave -->
+    <table class="header-table">
+        <tr>
+            <td><strong>FECHA:</strong> <span id="lbl-fecha">19/09/2023</span></td>
+            <td><strong>Matrícula:</strong> <span id="lbl-matricula">YV648T</span></td>
+        </tr>
+        <tr>
+            <td><strong>Tipo Aeronave:</strong> <span id="lbl-tipo">MD80</span></td>
+            <td><strong>C.G. Base:</strong> <span id="lbl-cg">936.92</span> In</td>
+        </tr>
+        <tr>
+            <td><strong>Pesos en:</strong> <span id="lbl-unidades">Libras</span></td>
+            <td><strong>MAC Base:</strong> <span id="lbl-mac">32.44</span> %</td>
+        </tr>
+        <tr>
+            <td colspan="2"><strong>SERIAL NUMBER:</strong> <span id="lbl-serial">49763</span></td>
+        </tr>
+    </table>
+
+    <!-- Tabla Principal de Ítems -->
+    <table class="main-table">
+        <thead>
+            <tr>
+                <th>ITEMS</th>
+                <th>Peso</th>
+                <th>ESTACIÓN (In)</th>
+                <th>Unidad de índice</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>BASIC EMPTY WEIGHT</strong></td>
+                <td><input type="number" class="editable" id="bew-peso" value="84251" oninput="calcularTodo()"></td>
+                <td class="text-center"><span id="bew-est">936.9</span></td>
+                <td class="text-center" id="bew-ind">12.6</td>
+            </tr>
+            <tr><td colspan="4" class="section-title">a) MANUALES, EQUIPOS DE NAVEGACION, TRIPULACION</td></tr>
+            <tr>
+                <td>Pilotos / Capitán y F/O</td>
+                <td><input type="number" class="editable" id="item-pilotos" value="374" oninput="calcularTodo()"></td>
+                <td class="text-center">122.0</td>
+                <td class="text-center" id="ind-pilotos">-3.0</td>
+            </tr>
+            <tr>
+                <td>Crew Compt. Manuales / Briefcase</td>
+                <td><input type="number" class="editable" id="item-crew-man" value="70" oninput="calcularTodo()"></td>
+                <td class="text-center">125.0</td>
+                <td class="text-center" id="ind-crew-man">-0.6</td>
+            </tr>
+            <tr><td colspan="4" class="section-title">b) ASISTENTES DE CABINA Y SUS EQUIPAJES</td></tr>
+            <tr>
+                <td>Aeromozas FWD / AFT Seats</td>
+                <td><input type="number" class="editable" id="item-cabina" value="520" oninput="calcularTodo()"></td>
+                <td class="text-center">755.5</td>
+                <td class="text-center" id="ind-cabina">-0.9</td>
+            </tr>
+            <tr><td colspan="4" class="section-title">c) EQUIPO DE SERVICIO DE COMIDAS Y LICORES (GALLEYS)</td></tr>
+            <tr>
+                <td>Galleys (1 al 5) y Lavatorios</td>
+                <td><input type="number" class="editable" id="item-galleys" value="367" oninput="calcularTodo()"></td>
+                <td class="text-center">850.0</td>
+                <td class="text-center" id="ind-galleys">0.5</td>
+            </tr>
+            <tr><td colspan="4" class="section-title">e) AGUA POTABLE Y OTROS</td></tr>
+            <tr>
+                <td>Agua Potable y Misceláneos</td>
+                <td><input type="number" class="editable" id="item-agua" value="392" oninput="calcularTodo()"></td>
+                <td class="text-center">487.0</td>
+                <td class="text-center" id="ind-agua">-1.7</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3 style="margin-top: 25px; margin-bottom: 10px; color: #38bdf8;">CONFIGURACIÓN DE AJUSTES OPERACIONALES (2/0, 3/0, 2/4, 3/4, 2/5, 3/5)</h3>
+
+    <!-- Contenedor Dinámico para los Ajustes Operacionales Solicitados -->
+    <div class="adjustments-container" id="adjustments-grid">
+        <!-- Generado por JavaScript -->
+    </div>
+</div>
+
+<script>
+    const database = {
+        "YV648T": { fecha: "19/09/2023", tipo: "MD80", unidades: "Libras", serial: "49763", cg: 936.92, mac: 32.44, bew: 84251, est: 936.9 },
+        "YV647T": { fecha: "09/02/2026", tipo: "MD83", unidades: "Libras", serial: "53347", cg: 936.85, mac: 32.40, bew: 83220, est: 936.8 },
+        "YV655T": { fecha: "14/01/2026", tipo: "Boeing 737-300", unidades: "Kilos", serial: "25032", cg: 644.31, mac: 13.91, bew: 32226, est: 644.0 },
+        "YV645T": { fecha: "26/12/2024", tipo: "Boeing 737-300", unidades: "Libras", serial: "27932", cg: 648.74, mac: 17.20, bew: 71250, est: 649.0 },
+        "YV663T": { fecha: "19/07/2025", tipo: "MD80", unidades: "Kilos", serial: "53218", cg: 944.90, mac: 37.23, bew: 36707, est: 944.9 },
+        "YV664T": { fecha: "19/09/2023", tipo: "MD80", unidades: "Kilos", serial: "53216", cg: 944.90, mac: 37.40, bew: 36577, est: 944.9 },
+        "YV3063": { fecha: "05/12/2025", tipo: "Boeing 737-300", unidades: "Kilos", serial: "26311", cg: 656.52, mac: 22.25, bew: 26311, est: 652.0 },
+        "YV676T": { fecha: "11/06/2026", tipo: "Boeing 737-200", unidades: "Libras", serial: "22120", cg: 648.12, mac: 16.76, bew: 58725, est: 648.1 }
+    };
+
+    const ajustesConfig = [
+        { key: "2/0", label: "AJUSTE 2/0 (2 Pilotos, 0 Asistentes)", pesoAdicional: 905, indAdicional: 7.3 },
+        { key: "3/0", label: "AJUSTE 3/0 (3 Pilotos, 0 Asistentes)", pesoAdicional: 1092, indAdicional: 5.9 },
+        { key: "2/4", label: "AJUSTE 2/4 (2 Pilotos, 4 Asistentes)", pesoAdicional: 1830, indAdicional: 5.7 },
+        { key: "3/4", label: "AJUSTE 3/4 (3 Pilotos, 4 Asistentes)", pesoAdicional: 2017, indAdicional: 4.0 },
+        { key: "2/5", label: "AJUSTE 2/5 (2 Pilotos, 5 Asistentes)", pesoAdicional: 1960, indAdicional: 6.0 },
+        { key: "3/5", label: "AJUSTE 3/5 (3 Pilotos, 5 Asistentes)", pesoAdicional: 2147, indAdicional: 5.0 }
+    ];
+
+    function cargarAeronave() {
+        const reg = document.getElementById('fleet-select').value;
+        const data = database[reg];
+
+        document.getElementById('lbl-fecha').innerText = data.fecha;
+        document.getElementById('lbl-matricula').innerText = reg;
+        document.getElementById('lbl-tipo').innerText = data.tipo;
+        document.getElementById('lbl-cg').innerText = data.cg;
+        document.getElementById('lbl-unidades').innerText = data.unidades;
+        document.getElementById('lbl-mac').innerText = data.mac;
+        document.getElementById('lbl-serial').innerText = data.serial;
+        document.getElementById('units-display').innerText = "Unidades: " + data.unidades;
+
+        document.getElementById('bew-peso').value = data.bew;
+        document.getElementById('bew-est').innerText = data.est;
+
+        calcularTodo();
+    }
+
+    function calcularTodo() {
+        const bew = parseFloat(document.getElementById('bew-peso').value) || 0;
+        const p1 = parseFloat(document.getElementById('item-pilotos').value) || 0;
+        const p2 = parseFloat(document.getElementById('item-crew-man').value) || 0;
+        const p3 = parseFloat(document.getElementById('item-cabina').value) || 0;
+        const p4 = parseFloat(document.getElementById('item-galleys').value) || 0;
+        const p5 = parseFloat(document.getElementById('item-agua').value) || 0;
+
+        const baseIndice = 12.5;
+
+        const grid = document.getElementById('adjustments-grid');
+        grid.innerHTML = '';
+
+        ajustesConfig.forEach(adj => {
+            const subtotalPeso = adj.pesoAdicional + (p1 + p2 + p3 + p4 + p5) * 0.1;
+            const oew = bew + subtotalPeso;
+            const iu = adj.indAdicional + (baseIndice * 0.1);
+            const macResult = (23.0 + (iu * 0.05)).toFixed(2);
+
+            const card = document.createElement('div');
+            card.className = 'adjustment-card';
+            card.innerHTML = `
+                <div class="adj-header">${adj.label}</div>
+                <div class="adj-body">
+                    <div class="adj-row">
+                        <span>SUB-TOTAL PESO:</span>
+                        <span style="font-weight:bold;">${subtotalPeso.toFixed(1)}</span>
+                    </div>
+                    <div class="adj-row">
+                        <span>SUB-TOTAL ÍNDICE:</span>
+                        <span>${adj.indAdicional.toFixed(1)}</span>
+                    </div>
+                    <div class="adj-row">
+                        <span>OPERATIONAL EMPTY WEIGHT (OEW):</span>
+                        <span class="badge-green">${oew.toFixed(0)}</span>
+                    </div>
+                    <div class="adj-row">
+                        <span>I.U. RESPECTO AL c.a.:</span>
+                        <span>${iu.toFixed(2)}</span>
+                    </div>
+                    <div class="adj-row" style="flex-direction: column; align-items: stretch; gap: 4px;">
+                        <span style="font-size: 0.8rem; color: #94a3b8;">% MAC / CENTRO DE GRAVEDAD:</span>
+                        <span class="badge-yellow">${macResult} %</span>
+                    </div>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    }
+
+    window.onload = cargarAeronave;
+</script>
+
+</body>
+</html>
